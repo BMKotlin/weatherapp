@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Weather Forecast</string>
+
+    <string name="btn_get_weather">Get Weather</string>
+
+    <string name="text_check_search_key">Please input city name (>=3)</string>
+
+    <string name="text_date">Date: %s</string>
+    <string name="text_avg_temperature">Average Temperature: %d\u2103</string>
+    <string name="text_pressure">Pressure: %d</string>
+    <string name="text_humidity">Humidity: %d%%</string>
+    <string name="text_description">Description: %s</string>
+
+</resources>
