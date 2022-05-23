@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class WeatherTestDAO {
+class DatabaseTest {
 
     private lateinit var weatherDatabase: WeatherDatabase
     private lateinit var weatherDao: WeatherDAO

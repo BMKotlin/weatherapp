@@ -4,8 +4,9 @@ import com.viht.weathermvvm.data.local.dao.WeatherDAO
 import com.viht.weathermvvm.data.local.entity.WeatherEntity
 import com.viht.weathermvvm.data.remote.api.WeatherHelper
 import com.viht.weathermvvm.data.remote.response.DataResponse
+import com.viht.weathermvvm.di.IoDispatcher
 import com.viht.weathermvvm.utils.DateUtil
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class WeatherRepository @Inject constructor(
     private val weatherHelper: WeatherHelper,
     private val weatherDao: WeatherDAO,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     networkManager: NetworkManager
 ) : ApiResponse(networkManager) {
 
@@ -33,17 +35,17 @@ class WeatherRepository @Inject constructor(
                 }
                 emit(result)
             }
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(dispatcher)//Dispatchers.IO
     }
 
     suspend fun getListForecastCached(searchKey: String): Flow<ApiResult<DataResponse>?> {
         return flow {
             val result = fetchWeatherCached(searchKey)
             emit(result)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(dispatcher)//Dispatchers.IO
     }
 
-    private suspend fun fetchWeatherCached(searchKey: String): ApiResult<DataResponse>? =
+    suspend fun fetchWeatherCached(searchKey: String): ApiResult<DataResponse>? =
         weatherDao.getBySearchKey(searchKey, DateUtil.getDateFromNow())?.let {
             ApiResult.Success(it.weather)
         }

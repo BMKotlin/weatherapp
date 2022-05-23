@@ -1,21 +1,29 @@
 package com.viht.weathermvvm
 
 import com.viht.weathermvvm.repository.ApiResult
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.ResponseBody.Companion.toResponseBody
+import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.io.IOException
 
 class NetworkTest {
-//    private val dispatcher = StandardTestDispatcher()
-//
+    private val dispatcher = StandardTestDispatcher()
+
+
+
 //    @Test
 //    fun `when lambda returns successfully then it should emit the result as success`() {
-//        runTest {
-//            val lambdaResult = true
-//            val result = safeApiCall(dispatcher) { lambdaResult }
-//            assertEquals(ApiResult.Success(lambdaResult), result)
+//        runBlocking {
+//            withContext(dispatcher) {
+//                val lambdaResult = true
+//                val result = lambdaResult
+//                assertEquals(ApiResult.Success(lambdaResult), result)
+//            }
 //        }
 //    }
 //
@@ -26,7 +34,7 @@ class NetworkTest {
 //            assertEquals(ApiResult.NetworkError, result)
 //        }
 //    }
-//
+
 //    @Test
 //    fun `when lambda throws HttpException then it should emit the result as GenericError`() {
 //        val errorBody = "{\"errors\": [\"Unexpected parameter\"]}".toResponseBody("application/json".toMediaTypeOrNull())
