@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.ui.adapter
+package com.viht.weathermvvm.presentation.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.viht.weathermvvm.R
 import com.viht.weathermvvm.databinding.ItemWeatherBinding
-import com.viht.weathermvvm.model.Weather
-import com.viht.weathermvvm.utils.setSafeOnClickListener
+import com.viht.weathermvvm.domain.model.Weather
+import com.viht.weathermvvm.presentation.utils.setSafeOnClickListener
 
 class WeatherAdapter(private val onItemClick: (weather: Weather) -> Unit) :
     ListAdapter<Weather, WeatherAdapter.ViewHolder>(diffCallback) {

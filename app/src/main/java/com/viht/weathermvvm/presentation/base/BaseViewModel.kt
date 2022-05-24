@@ -1,8 +1,8 @@
-package com.viht.weathermvvm.ui.base
+package com.viht.weathermvvm.presentation.base
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.viht.weathermvvm.utils.SingleLiveEvent
+import com.viht.weathermvvm.presentation.utils.SingleLiveEvent
 
 abstract class BaseViewModel : ViewModel() {
     private val _loading = SingleLiveEvent<Boolean>()

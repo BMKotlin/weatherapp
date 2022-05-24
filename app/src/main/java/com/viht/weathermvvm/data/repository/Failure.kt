@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.repository
+package com.viht.weathermvvm.data.repository
 
 data class Failure (
     val cod: String?,

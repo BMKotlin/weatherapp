@@ -1,14 +1,14 @@
-package com.viht.weathermvvm.ui.main
+package com.viht.weathermvvm.presentation.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
-import com.viht.weathermvvm.data.remote.response.DataResponse
+import com.viht.weathermvvm.data.repository.ApiResult
 import com.viht.weathermvvm.data.workmanager.WeatherWorkManager
-import com.viht.weathermvvm.repository.ApiResult
-import com.viht.weathermvvm.repository.WeatherRepository
-import com.viht.weathermvvm.ui.base.BaseViewModel
-import com.viht.weathermvvm.utils.SingleLiveEvent
+import com.viht.weathermvvm.domain.model.DataModel
+import com.viht.weathermvvm.domain.usecase.WeatherUseCase
+import com.viht.weathermvvm.presentation.base.BaseViewModel
+import com.viht.weathermvvm.presentation.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,14 +17,14 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: WeatherRepository, private val workManager: WorkManager): BaseViewModel() {
-    private val _response: SingleLiveEvent<DataResponse?> = SingleLiveEvent()
-    val response: LiveData<DataResponse?> get() = _response
+class MainViewModel @Inject constructor(private val workManager: WorkManager, private val weatherUseCase : WeatherUseCase): BaseViewModel() {
+    private val _response: SingleLiveEvent<DataModel?> = SingleLiveEvent()
+    val response: LiveData<DataModel?> get() = _response
 
     fun getListForecast(searchKey: String) {
         handleLoading(true)
         viewModelScope.launch {
-            repository.getListForecast(searchKey).collect { values ->
+            weatherUseCase.execute(searchKey).collect { values ->
                 when(values){
                     is ApiResult.Success -> {
                         _response.postValue(values.data)

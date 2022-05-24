@@ -3,51 +3,28 @@ package com.viht.weathermvvm.data.local.converter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.viht.weathermvvm.data.remote.response.DataResponse
-import com.viht.weathermvvm.data.remote.response.TemperatureResponse
-import com.viht.weathermvvm.data.remote.response.WeatherDescriptionResponse
-import com.viht.weathermvvm.data.remote.response.WeatherResponse
+import com.viht.weathermvvm.domain.model.DataModel
+import com.viht.weathermvvm.domain.model.WeatherModel
 
 class Converters {
     @TypeConverter
-    fun toData(data: String): DataResponse? {
-        return Gson().fromJson<DataResponse>(data,DataResponse::class.java)
+    fun toData(data: String): DataModel? {
+        return Gson().fromJson(data,DataModel::class.java)
     }
 
     @TypeConverter
-    fun fromData(data: DataResponse): String? {
+    fun fromData(data: DataModel): String? {
         return Gson().toJson(data)
     }
 
     @TypeConverter
-    fun toList(list: String): List<WeatherResponse>? {
-        val listType = object : TypeToken<ArrayList<WeatherResponse>>(){}.type
-        return Gson().fromJson<List<WeatherResponse>>(list,listType)
+    fun toList(list: String): List<WeatherModel>? {
+        val listType = object : TypeToken<ArrayList<WeatherModel>>(){}.type
+        return Gson().fromJson<List<WeatherModel>>(list,listType)
     }
 
     @TypeConverter
-    fun fromList(weather: List<WeatherResponse>): String? {
-        return Gson().toJson(weather)
-    }
-
-    @TypeConverter
-    fun toTemp(temp: String): TemperatureResponse? {
-        return Gson().fromJson<TemperatureResponse>(temp,TemperatureResponse::class.java)
-    }
-
-    @TypeConverter
-    fun fromTemp(temp: TemperatureResponse): String? {
-        return Gson().toJson(temp)
-    }
-
-    @TypeConverter
-    fun toWeather(weather: String): List<WeatherDescriptionResponse>? {
-        val listType = object : TypeToken<ArrayList<WeatherDescriptionResponse>>(){}.type
-        return Gson().fromJson<List<WeatherDescriptionResponse>>(weather,listType)
-    }
-
-    @TypeConverter
-    fun fromWeather(weather: List<WeatherDescriptionResponse>): String? {
+    fun fromList(weather: List<WeatherModel>): String? {
         return Gson().toJson(weather)
     }
 }

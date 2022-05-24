@@ -1,9 +1,9 @@
-package com.viht.weathermvvm.repository
+package com.viht.weathermvvm.data.repository
 
 import android.content.Context
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.viht.weathermvvm.utils.connectivityManager
+import com.viht.weathermvvm.presentation.utils.connectivityManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

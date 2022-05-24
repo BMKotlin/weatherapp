@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.utils
+package com.viht.weathermvvm.presentation.utils
 
 import java.text.SimpleDateFormat
 import java.util.*

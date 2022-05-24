@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.utils
+package com.viht.weathermvvm.presentation.utils
 
 import android.app.Activity
 import android.content.Context

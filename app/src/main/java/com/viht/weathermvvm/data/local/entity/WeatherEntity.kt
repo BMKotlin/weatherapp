@@ -4,12 +4,12 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.viht.weathermvvm.data.remote.response.DataResponse
+import com.viht.weathermvvm.domain.model.DataModel
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Entity(
-    tableName = "weather",
+    tableName = "history",
     indices = [
         Index(
             value = ["searchKey", "dateSearch"],
@@ -20,9 +20,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class WeatherEntity(
     val searchKey: String,
-    // EEEE, dd MMM yyyy format
-    val dateSearch: String,
-    val weather: DataResponse
+    val dateSearch: String,// EEEE, dd MMM yyyy format
+    val weather: DataModel
 ): Parcelable {
     @IgnoredOnParcel
     @PrimaryKey(autoGenerate = true)

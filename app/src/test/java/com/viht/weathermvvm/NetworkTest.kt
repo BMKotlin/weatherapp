@@ -1,15 +1,6 @@
 package com.viht.weathermvvm
 
-import com.viht.weathermvvm.repository.ApiResult
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody.Companion.toResponseBody
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import java.io.IOException
 
 class NetworkTest {
     private val dispatcher = StandardTestDispatcher()

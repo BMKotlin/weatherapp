@@ -1,6 +1,6 @@
 package com.viht.weathermvvm
 
-import com.viht.weathermvvm.utils.DateUtil
+import com.viht.weathermvvm.presentation.utils.DateUtil
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.utils
+package com.viht.weathermvvm.presentation.utils
 
 import android.util.Log
 import androidx.annotation.MainThread

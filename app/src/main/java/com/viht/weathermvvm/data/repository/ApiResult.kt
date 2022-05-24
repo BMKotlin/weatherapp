@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.repository
+package com.viht.weathermvvm.data.repository
 
 sealed class ApiResult<T>(
     val data: T? = null,

@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.repository
+package com.viht.weathermvvm.data.repository
 
 import android.util.Log
 import com.google.gson.Gson

@@ -2,7 +2,10 @@ package com.viht.weathermvvm.di
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.viht.weathermvvm.data.remote.api.WeatherService
+import com.viht.weathermvvm.domain.repository.WeatherRepository
+import com.viht.weathermvvm.domain.usecase.WeatherUseCase
 import com.viht.weathermvvm.utils.Constants.BASE_URL
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

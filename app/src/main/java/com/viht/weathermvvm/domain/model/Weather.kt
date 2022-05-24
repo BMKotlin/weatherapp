@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.model
+package com.viht.weathermvvm.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

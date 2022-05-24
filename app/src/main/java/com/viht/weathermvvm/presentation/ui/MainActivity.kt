@@ -1,4 +1,4 @@
-package com.viht.weathermvvm.ui
+package com.viht.weathermvvm.presentation.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +8,14 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.viht.weathermvvm.R
-import com.viht.weathermvvm.data.remote.response.toConvertedData
 import com.viht.weathermvvm.databinding.ActivityMainBinding
-import com.viht.weathermvvm.model.Weather
-import com.viht.weathermvvm.ui.adapter.WeatherAdapter
-import com.viht.weathermvvm.ui.base.BaseActivity
-import com.viht.weathermvvm.ui.main.MainViewModel
-import com.viht.weathermvvm.utils.getValue
-import com.viht.weathermvvm.utils.hideKeyboard
-import com.viht.weathermvvm.utils.isValidationSearchKey
+import com.viht.weathermvvm.domain.model.Weather
+import com.viht.weathermvvm.presentation.ui.adapter.WeatherAdapter
+import com.viht.weathermvvm.presentation.base.BaseActivity
+import com.viht.weathermvvm.presentation.ui.main.MainViewModel
+import com.viht.weathermvvm.presentation.utils.getValue
+import com.viht.weathermvvm.presentation.utils.hideKeyboard
+import com.viht.weathermvvm.presentation.utils.isValidationSearchKey
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,7 +79,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         viewModel.response.observe(this) {
             Log.d("viht", it.toString())
-            adapterWeather.submitList(it?.toConvertedData())
+            adapterWeather.submitList(it?.toWeatherUI())
         }
     }
 

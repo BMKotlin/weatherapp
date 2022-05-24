@@ -1,20 +1,21 @@
-package com.viht.weathermvvm.ui.base
+package com.viht.weathermvvm.presentation.base
 
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.viht.weathermvvm.R
-import com.viht.weathermvvm.utils.gone
-import com.viht.weathermvvm.utils.visible
+import com.viht.weathermvvm.presentation.utils.gone
+import com.viht.weathermvvm.presentation.utils.visible
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
-    internal lateinit var binding: VB
+    protected lateinit var binding: VB
 
     private lateinit var progressBar: CircularProgressIndicator
 
@@ -45,11 +46,17 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         this.addContentView(relativeLayout, params)
     }
 
-    internal fun showProgressBar() {
+    protected fun showProgressBar() {
         progressBar.visible()
     }
 
-    internal fun hideProgressBar() {
+    protected fun hideProgressBar() {
         progressBar.gone()
     }
+
+    protected fun shortShowToast(msg: String) =
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+    protected fun longShowToast(msg: String) =
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }
