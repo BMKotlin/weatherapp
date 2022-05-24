@@ -6,6 +6,8 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.viht.weathermvvm.data.local.dao.WeatherDAO
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 @HiltWorker
@@ -16,14 +18,10 @@ class WeatherWorkManager constructor(
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {
-        local.deleteAll()
-        Log.d("Work for every second", "doWork: Running")
-//        withContext(Dispatchers.IO) {
-////            local.deleteAll()
-//
-//            return@withContext Result.success()
-//        }
+        Log.d("Work for everyday", "doWork: Running")
+        withContext(Dispatchers.IO) {
+            local.deleteAll()
+        }
         return Result.success()
-//        return Result.failure()
     }
 }

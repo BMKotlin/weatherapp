@@ -1,8 +1,6 @@
 package com.viht.weathermvvm.data.remote.response
 
 import android.os.Parcelable
-import com.viht.weathermvvm.domain.model.Weather
-import com.viht.weathermvvm.presentation.utils.DateUtil
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

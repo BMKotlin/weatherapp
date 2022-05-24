@@ -8,10 +8,10 @@ import androidx.test.filters.SmallTest
 import com.viht.weathermvvm.data.local.WeatherDatabase
 import com.viht.weathermvvm.data.local.dao.WeatherDAO
 import com.viht.weathermvvm.data.local.entity.WeatherEntity
-import com.viht.weathermvvm.data.remote.response.DataResponse
-import com.viht.weathermvvm.data.remote.response.TemperatureResponse
-import com.viht.weathermvvm.data.remote.response.WeatherDescriptionResponse
-import com.viht.weathermvvm.data.remote.response.WeatherResponse
+import com.viht.weathermvvm.domain.model.DataModel
+import com.viht.weathermvvm.domain.model.TemperatureModel
+import com.viht.weathermvvm.domain.model.WeatherDescriptionModel
+import com.viht.weathermvvm.domain.model.WeatherModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -30,15 +30,15 @@ class DatabaseTest {
 
     private val searchKey: String = "saigon"
     private val dateSearch: String = "Mon, 23 May 2022"
-    private var data: DataResponse = DataResponse(arrayListOf<WeatherResponse>().also {
+    private var data: DataModel = DataModel(arrayListOf<WeatherModel>().also {
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653278400,
                 humidity = 79,
                 pressure = 1006,
-                temp = TemperatureResponse(max = 29.97F, min = 24.62F),
+                temp = TemperatureModel(max = 29.97F, min = 24.62F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "moderate rain",
                         main = "Rain"
                     )
@@ -46,13 +46,13 @@ class DatabaseTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653364800,
                 humidity = 55,
                 pressure = 1009,
-                temp = TemperatureResponse(max = 34.54F, min = 24.95F),
+                temp = TemperatureModel(max = 34.54F, min = 24.95F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "overcast clouds",
                         main = "Clouds"
                     )
@@ -60,13 +60,13 @@ class DatabaseTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653451200,
                 humidity = 56,
                 pressure = 1010,
-                temp = TemperatureResponse(max = 34.26F, min = 26.12F),
+                temp = TemperatureModel(max = 34.26F, min = 26.12F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "light rain",
                         main = "Rain"
                     )
@@ -74,13 +74,13 @@ class DatabaseTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653537600,
                 humidity = 66,
                 pressure = 1008,
-                temp = TemperatureResponse(max = 32.33F, min = 25.62F),
+                temp = TemperatureModel(max = 32.33F, min = 25.62F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "light rain",
                         main = "Rain"
                     )
@@ -88,13 +88,13 @@ class DatabaseTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653624000,
                 humidity = 62,
                 pressure = 1007,
-                temp = TemperatureResponse(max = 31.7F, min = 25.9F),
+                temp = TemperatureModel(max = 31.7F, min = 25.9F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "light rain",
                         main = "Rain"
                     )

@@ -12,12 +12,13 @@ import com.viht.weathermvvm.presentation.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val workManager: WorkManager, private val weatherUseCase : WeatherUseCase): BaseViewModel() {
+class MainViewModel @Inject constructor(private val weatherUseCase : WeatherUseCase): BaseViewModel() {
     private val _response: SingleLiveEvent<DataModel?> = SingleLiveEvent()
     val response: LiveData<DataModel?> get() = _response
 
@@ -39,28 +40,6 @@ class MainViewModel @Inject constructor(private val workManager: WorkManager, pr
                     }
                 }
             }
-        }
-    }
-
-    fun startPeriodicWork() {
-        CoroutineScope(Dispatchers.Default).launch {
-
-            val constraints =
-                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
-            val periodicWorkRequest: PeriodicWorkRequest =
-                PeriodicWorkRequestBuilder<WeatherWorkManager>(
-                    15, TimeUnit.MINUTES
-                )
-                    .addTag("DELETE_WEATHER_WORKER")
-                    //.setConstraints(constraints)
-                    .build()
-
-            workManager.enqueueUniquePeriodicWork(
-                "DELETE_WEATHER",
-                ExistingPeriodicWorkPolicy.REPLACE,
-                periodicWorkRequest
-            )
         }
     }
 }

@@ -18,8 +18,7 @@ class WeatherRepositoryImp @Inject constructor(
     private val weatherHelper: WeatherHelper,
     private val weatherDao: WeatherDAO,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
-    networkManager: NetworkManager
-) : ApiResponse(networkManager), WeatherRepository {
+) : ApiResponse(), WeatherRepository {
 
     override suspend fun getListForecast(searchKey: String): Flow<ApiResult<DataModel>?> {
         return flow {

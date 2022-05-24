@@ -1,7 +1,10 @@
 package com.viht.weathermvvm.di
 
+import android.content.Context
+import androidx.work.WorkManager
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.viht.weathermvvm.data.remote.api.WeatherService
+import com.viht.weathermvvm.data.repository.NetworkManager
 import com.viht.weathermvvm.domain.repository.WeatherRepository
 import com.viht.weathermvvm.domain.usecase.WeatherUseCase
 import com.viht.weathermvvm.utils.Constants.BASE_URL
@@ -9,6 +12,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -75,4 +79,12 @@ object NetworkModule {
     fun provideWeatherApi(retrofit: Retrofit): WeatherService {
         return retrofit.create(WeatherService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideWorkManager(@ApplicationContext context: Context) = WorkManager.getInstance(context)
+
+    @Singleton
+    @Provides
+    fun provideNetworkManager(@ApplicationContext context: Context) = NetworkManager(context)
 }

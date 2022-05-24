@@ -32,12 +32,4 @@ object DatabaseModule {
     fun provideWorkerFactory(
         local: WeatherDAO
     ) = WeatherWorkFactory(local)
-
-//    @Singleton
-//    @Provides
-//    fun provideWorkManager(app: Application) = WorkManager.getInstance(app.applicationContext)
-
-    @Singleton
-    @Provides
-    fun provideWorkManager(@ApplicationContext context: Context) = WorkManager.getInstance(context)
 }

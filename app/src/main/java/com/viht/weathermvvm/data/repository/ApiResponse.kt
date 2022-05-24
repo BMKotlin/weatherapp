@@ -7,8 +7,10 @@ import retrofit2.Response
 import javax.inject.Inject
 
 open class ApiResponse @Inject constructor(
-    private val networkManager: NetworkManager
 ) {
+    @Inject
+    lateinit var networkManager: NetworkManager
+
     suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): ApiResult<T> {
         if (networkManager.isNetworkAvailable()) {
             try {

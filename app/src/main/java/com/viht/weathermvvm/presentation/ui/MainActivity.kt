@@ -7,7 +7,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.test.core.app.ActivityScenario.launch
+import androidx.work.*
 import com.viht.weathermvvm.R
+import com.viht.weathermvvm.data.workmanager.WeatherWorkManager
 import com.viht.weathermvvm.databinding.ActivityMainBinding
 import com.viht.weathermvvm.domain.model.Weather
 import com.viht.weathermvvm.presentation.ui.adapter.WeatherAdapter
@@ -17,9 +20,18 @@ import com.viht.weathermvvm.presentation.utils.getValue
 import com.viht.weathermvvm.presentation.utils.hideKeyboard
 import com.viht.weathermvvm.presentation.utils.isValidationSearchKey
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
+
+    @Inject
+    lateinit var workManager: WorkManager
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -40,50 +52,78 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun initView() {
         val layoutManager = LinearLayoutManager(this)
-        binding.rvWeather.layoutManager = layoutManager
 
-        val dividerItemDecoration = DividerItemDecoration(
-            binding.rvWeather.context,
-            layoutManager.orientation
-        )
-        binding.rvWeather.addItemDecoration(dividerItemDecoration)
+        binding.apply {
+            rvWeather.layoutManager = layoutManager
 
-        binding.rvWeather.adapter = adapterWeather
+            val dividerItemDecoration = DividerItemDecoration(
+                rvWeather.context,
+                layoutManager.orientation
+            )
+            rvWeather.addItemDecoration(dividerItemDecoration)
 
-        binding.btnGetWeather.setOnClickListener {
-            hideKeyboard()
-            val searchKey = binding.edSearch.getValue()
-            if (!binding.edSearch.isValidationSearchKey()) {
-                Toast.makeText(this@MainActivity, resources.getString(R.string.text_check_search_key), Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.getListForecast(searchKey)
+            rvWeather.adapter = adapterWeather
+
+            btnGetWeather.setOnClickListener {
+                hideKeyboard()
+                val searchKey = edSearch.getValue()
+                if (!edSearch.isValidationSearchKey()) {
+                    shortShowToast(resources.getString(R.string.text_check_search_key))
+                } else {
+                    viewModel.getListForecast(searchKey)
+                }
             }
         }
+
     }
 
     private fun initData() {
-        viewModel.startPeriodicWork()
-        viewModel.error.observe(this) {
-            Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
-            Log.d("viht error", it)
-            adapterWeather.submitList(mutableListOf())
-        }
+        viewModel.apply {
+            error.observe(this@MainActivity) {
+                shortShowToast(it)
+                Log.d("viht error", it)
+                adapterWeather.submitList(mutableListOf())
+            }
 
-        viewModel.loading.observe(this) {
-            if (it) {
-                showProgressBar()
-            } else {
-                hideProgressBar()
+            loading.observe(this@MainActivity) {
+                if (it) {
+                    showProgressBar()
+                } else {
+                    hideProgressBar()
+                }
+            }
+
+            response.observe(this@MainActivity) {
+                Log.d("viht", it.toString())
+                adapterWeather.submitList(it?.toWeatherUI())
             }
         }
 
-        viewModel.response.observe(this) {
-            Log.d("viht", it.toString())
-            adapterWeather.submitList(it?.toWeatherUI())
-        }
+        startPeriodicWork()
     }
 
     private fun onClickWeather(weather: Weather) {
-        Toast.makeText(this, weather.description, Toast.LENGTH_SHORT).show()
+        shortShowToast(weather.description)
+    }
+
+    private fun startPeriodicWork() {
+        CoroutineScope(Dispatchers.Default).launch {
+            val constraints =
+                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+            val periodicWorkRequest: PeriodicWorkRequest =
+                PeriodicWorkRequestBuilder<WeatherWorkManager>(
+                    15, TimeUnit.MINUTES
+                )
+                    .addTag("DELETE_WEATHER_WORKER")
+                    //.setConstraints(constraints)
+                    .build()
+
+            workManager.enqueueUniquePeriodicWork(
+                "DELETE_WEATHER",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWorkRequest
+            )
+        }
     }
 }

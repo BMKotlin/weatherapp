@@ -3,19 +3,31 @@ package com.viht.weathermvvm
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.viht.weathermvvm.data.local.dao.WeatherDAO
 import com.viht.weathermvvm.data.remote.api.WeatherHelper
-import com.viht.weathermvvm.data.remote.response.DataResponse
-import com.viht.weathermvvm.data.remote.response.TemperatureResponse
-import com.viht.weathermvvm.data.remote.response.WeatherDescriptionResponse
-import com.viht.weathermvvm.data.remote.response.WeatherResponse
+import com.viht.weathermvvm.data.repository.ApiResult
 import com.viht.weathermvvm.data.repository.NetworkManager
 import com.viht.weathermvvm.data.repository.WeatherRepositoryImp
+import com.viht.weathermvvm.domain.model.DataModel
+import com.viht.weathermvvm.domain.model.TemperatureModel
+import com.viht.weathermvvm.domain.model.WeatherDescriptionModel
+import com.viht.weathermvvm.domain.model.WeatherModel
+import com.viht.weathermvvm.domain.usecase.WeatherUseCase
 import com.viht.weathermvvm.presentation.ui.main.MainViewModel
+import com.viht.weathermvvm.presentation.utils.getOrAwaitValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.setMain
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
+import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
 
 
@@ -28,15 +40,15 @@ class MainViewModelTest {
 
     private val searchKey: String = "saigon"
     private val dateSearch: String = "Mon, 23 May 2022"
-    private var data: DataResponse = DataResponse(arrayListOf<WeatherResponse>().also {
+    private var data: DataModel = DataModel(arrayListOf<WeatherModel>().also {
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653278400,
                 humidity = 79,
                 pressure = 1006,
-                temp = TemperatureResponse(max = 29.97F, min = 24.62F),
+                temp = TemperatureModel(max = 29.97F, min = 24.62F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "moderate rain",
                         main = "Rain"
                     )
@@ -44,13 +56,13 @@ class MainViewModelTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653364800,
                 humidity = 55,
                 pressure = 1009,
-                temp = TemperatureResponse(max = 34.54F, min = 24.95F),
+                temp = TemperatureModel(max = 34.54F, min = 24.95F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "overcast clouds",
                         main = "Clouds"
                     )
@@ -58,13 +70,13 @@ class MainViewModelTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653451200,
                 humidity = 56,
                 pressure = 1010,
-                temp = TemperatureResponse(max = 34.26F, min = 26.12F),
+                temp = TemperatureModel(max = 34.26F, min = 26.12F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "light rain",
                         main = "Rain"
                     )
@@ -72,13 +84,13 @@ class MainViewModelTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653537600,
                 humidity = 66,
                 pressure = 1008,
-                temp = TemperatureResponse(max = 32.33F, min = 25.62F),
+                temp = TemperatureModel(max = 32.33F, min = 25.62F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "light rain",
                         main = "Rain"
                     )
@@ -86,13 +98,13 @@ class MainViewModelTest {
             )
         )
         it.add(
-            WeatherResponse(
+            WeatherModel(
                 dt = 1653624000,
                 humidity = 62,
                 pressure = 1007,
-                temp = TemperatureResponse(max = 31.7F, min = 25.9F),
+                temp = TemperatureModel(max = 31.7F, min = 25.9F),
                 weather = arrayListOf(
-                    WeatherDescriptionResponse(
+                    WeatherDescriptionModel(
                         description = "light rain",
                         main = "Rain"
                     )
@@ -102,10 +114,12 @@ class MainViewModelTest {
     })
 
     private val testDispatcher = StandardTestDispatcher()//TestCoroutineDispatcher()
-    lateinit var mainViewModel: MainViewModel
+    
+    @Spy
+    private var mainViewModel: MainViewModel = spy(MainViewModel::class.java)
 
     @Mock
-    var mainRepositoryImp: WeatherRepositoryImp = mock(WeatherRepositoryImp::class.java)
+    private var mainRepositoryImp: WeatherRepositoryImp = mock(WeatherRepositoryImp::class.java)
 
     @Mock
     private var apiService: WeatherHelper = mock(WeatherHelper::class.java)
@@ -114,29 +128,32 @@ class MainViewModelTest {
     lateinit var apiDao: WeatherDAO
 
     @Mock
+    var useCase: WeatherUseCase = mock(WeatherUseCase::class.java)
+
+    @Mock
     private var network: NetworkManager = mock(NetworkManager::class.java)
 
     @get:Rule
     val instantTaskExecutionRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
-//    @Before
-//    fun setup() {
-//        MockitoAnnotations.initMocks(this)
-//        Dispatchers.setMain(testDispatcher)
-//        mainRepositoryImp = WeatherRepositoryImp(apiService, apiDao, testDispatcher, network)
-//        mainViewModel = MainViewModel(mainRepositoryImp)
-//    }
-//
-//    @Test
-//    fun getLoadingTest() {
-//        runBlocking {
-//            mainRepositoryImp = mock(WeatherRepositoryImp::class.java)
-//            `when`(mainRepositoryImp.getListForecast("saigon"))
-//                .thenReturn(flowOf(ApiResult.Success(data)))
-//            mainViewModel.getListForecast("saigon")
-//            assertEquals(mainViewModel.loading.getOrAwaitValue(), true)
-//        }
-//    }
+    @Before
+    fun setup() {
+        MockitoAnnotations.initMocks(this)
+        Dispatchers.setMain(testDispatcher)
+        mainRepositoryImp = WeatherRepositoryImp(apiService, apiDao, testDispatcher)
+        mainViewModel = MainViewModel(useCase)
+    }
+
+    @Test
+    fun getLoadingTest() {
+        runBlocking {
+            mainRepositoryImp = mock(WeatherRepositoryImp::class.java)
+            `when`(mainRepositoryImp.getListForecast("saigon"))
+                .thenReturn(flowOf(ApiResult.Success(data)))
+            mainViewModel.getListForecast("saigon")
+            assertEquals(mainViewModel.loading.getOrAwaitValue(), true)
+        }
+    }
 
 //    @Test
 //    fun getWeatherBySearchKey() {
