@@ -29,7 +29,7 @@ class WeatherRepository @Inject constructor(
                 //Cache to database if response is successful
                 if (result is ApiResult.Success) {
                     result.data?.let { it ->
-                        weatherDao.deleteAll()
+//                        weatherDao.deleteAll()
                         weatherDao.insert(WeatherEntity(searchKey, DateUtil.getDateFromNow(), it))
                     }
                 }

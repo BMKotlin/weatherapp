@@ -1,8 +1,10 @@
 package com.viht.weathermvvm.di
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.viht.weathermvvm.data.local.WeatherDatabase
 import com.viht.weathermvvm.data.local.dao.WeatherDAO
+import com.viht.weathermvvm.data.workmanager.WeatherWorkFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,4 +26,18 @@ object DatabaseModule {
     fun provideWeatherDao(appDatabase: WeatherDatabase): WeatherDAO {
         return appDatabase.getWeatherDao()
     }
+
+    @Singleton
+    @Provides
+    fun provideWorkerFactory(
+        local: WeatherDAO
+    ) = WeatherWorkFactory(local)
+
+//    @Singleton
+//    @Provides
+//    fun provideWorkManager(app: Application) = WorkManager.getInstance(app.applicationContext)
+
+    @Singleton
+    @Provides
+    fun provideWorkManager(@ApplicationContext context: Context) = WorkManager.getInstance(context)
 }

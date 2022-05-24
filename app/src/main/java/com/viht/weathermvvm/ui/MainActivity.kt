@@ -63,6 +63,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun initData() {
+        viewModel.startPeriodicWork()
         viewModel.error.observe(this) {
             Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
             Log.d("viht error", it)
