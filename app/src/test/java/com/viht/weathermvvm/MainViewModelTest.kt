@@ -1,18 +1,8 @@
 package com.viht.weathermvvm
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.viht.weathermvvm.data.local.dao.WeatherDAO
-import com.viht.weathermvvm.data.remote.api.WeatherHelper
-import com.viht.weathermvvm.data.repository.ApiResult
-import com.viht.weathermvvm.data.repository.NetworkManager
-import com.viht.weathermvvm.data.repository.WeatherRepositoryImp
-import com.viht.weathermvvm.domain.model.DataModel
-import com.viht.weathermvvm.domain.model.TemperatureModel
-import com.viht.weathermvvm.domain.model.WeatherDescriptionModel
-import com.viht.weathermvvm.domain.model.WeatherModel
-import com.viht.weathermvvm.domain.usecase.WeatherUseCase
-import com.viht.weathermvvm.presentation.ui.main.MainViewModel
-import com.viht.weathermvvm.presentation.utils.getOrAwaitValue
+import com.viht.domain.repository.ApiResult
+import com.viht.presentation.utils.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -40,98 +30,99 @@ class MainViewModelTest {
 
     private val searchKey: String = "saigon"
     private val dateSearch: String = "Mon, 23 May 2022"
-    private var data: DataModel = DataModel(arrayListOf<WeatherModel>().also {
-        it.add(
-            WeatherModel(
-                dt = 1653278400,
-                humidity = 79,
-                pressure = 1006,
-                temp = TemperatureModel(max = 29.97F, min = 24.62F),
-                weather = arrayListOf(
-                    WeatherDescriptionModel(
-                        description = "moderate rain",
-                        main = "Rain"
+    private var data: com.viht.domain.model.DataModel =
+        com.viht.domain.model.DataModel(arrayListOf<com.viht.domain.model.WeatherModel>().also {
+            it.add(
+                com.viht.domain.model.WeatherModel(
+                    dt = 1653278400,
+                    humidity = 79,
+                    pressure = 1006,
+                    temp = com.viht.domain.model.TemperatureModel(max = 29.97F, min = 24.62F),
+                    weather = arrayListOf(
+                        com.viht.domain.model.WeatherDescriptionModel(
+                            description = "moderate rain",
+                            main = "Rain"
+                        )
                     )
                 )
             )
-        )
-        it.add(
-            WeatherModel(
-                dt = 1653364800,
-                humidity = 55,
-                pressure = 1009,
-                temp = TemperatureModel(max = 34.54F, min = 24.95F),
-                weather = arrayListOf(
-                    WeatherDescriptionModel(
-                        description = "overcast clouds",
-                        main = "Clouds"
+            it.add(
+                com.viht.domain.model.WeatherModel(
+                    dt = 1653364800,
+                    humidity = 55,
+                    pressure = 1009,
+                    temp = com.viht.domain.model.TemperatureModel(max = 34.54F, min = 24.95F),
+                    weather = arrayListOf(
+                        com.viht.domain.model.WeatherDescriptionModel(
+                            description = "overcast clouds",
+                            main = "Clouds"
+                        )
                     )
                 )
             )
-        )
-        it.add(
-            WeatherModel(
-                dt = 1653451200,
-                humidity = 56,
-                pressure = 1010,
-                temp = TemperatureModel(max = 34.26F, min = 26.12F),
-                weather = arrayListOf(
-                    WeatherDescriptionModel(
-                        description = "light rain",
-                        main = "Rain"
+            it.add(
+                com.viht.domain.model.WeatherModel(
+                    dt = 1653451200,
+                    humidity = 56,
+                    pressure = 1010,
+                    temp = com.viht.domain.model.TemperatureModel(max = 34.26F, min = 26.12F),
+                    weather = arrayListOf(
+                        com.viht.domain.model.WeatherDescriptionModel(
+                            description = "light rain",
+                            main = "Rain"
+                        )
                     )
                 )
             )
-        )
-        it.add(
-            WeatherModel(
-                dt = 1653537600,
-                humidity = 66,
-                pressure = 1008,
-                temp = TemperatureModel(max = 32.33F, min = 25.62F),
-                weather = arrayListOf(
-                    WeatherDescriptionModel(
-                        description = "light rain",
-                        main = "Rain"
+            it.add(
+                com.viht.domain.model.WeatherModel(
+                    dt = 1653537600,
+                    humidity = 66,
+                    pressure = 1008,
+                    temp = com.viht.domain.model.TemperatureModel(max = 32.33F, min = 25.62F),
+                    weather = arrayListOf(
+                        com.viht.domain.model.WeatherDescriptionModel(
+                            description = "light rain",
+                            main = "Rain"
+                        )
                     )
                 )
             )
-        )
-        it.add(
-            WeatherModel(
-                dt = 1653624000,
-                humidity = 62,
-                pressure = 1007,
-                temp = TemperatureModel(max = 31.7F, min = 25.9F),
-                weather = arrayListOf(
-                    WeatherDescriptionModel(
-                        description = "light rain",
-                        main = "Rain"
+            it.add(
+                com.viht.domain.model.WeatherModel(
+                    dt = 1653624000,
+                    humidity = 62,
+                    pressure = 1007,
+                    temp = com.viht.domain.model.TemperatureModel(max = 31.7F, min = 25.9F),
+                    weather = arrayListOf(
+                        com.viht.domain.model.WeatherDescriptionModel(
+                            description = "light rain",
+                            main = "Rain"
+                        )
                     )
                 )
             )
-        )
-    })
+        })
 
     private val testDispatcher = StandardTestDispatcher()//TestCoroutineDispatcher()
     
     @Spy
-    private var mainViewModel: MainViewModel = spy(MainViewModel::class.java)
+    private var mainViewModel: com.viht.presentation.ui.main.MainViewModel = spy(com.viht.presentation.ui.main.MainViewModel::class.java)
 
     @Mock
-    private var mainRepositoryImp: WeatherRepositoryImp = mock(WeatherRepositoryImp::class.java)
+    private var mainRepositoryImp: com.viht.data.repository.WeatherRepositoryImp = mock(com.viht.data.repository.WeatherRepositoryImp::class.java)
 
     @Mock
-    private var apiService: WeatherHelper = mock(WeatherHelper::class.java)
+    private var apiService: com.viht.data.remote.api.WeatherHelper = mock(com.viht.data.remote.api.WeatherHelper::class.java)
 
     @Mock
-    lateinit var apiDao: WeatherDAO
+    lateinit var apiDao: com.viht.data.local.dao.WeatherDAO
 
     @Mock
-    var useCase: WeatherUseCase = mock(WeatherUseCase::class.java)
+    var useCase: com.viht.domain.usecase.WeatherUseCase = mock(com.viht.domain.usecase.WeatherUseCase::class.java)
 
     @Mock
-    private var network: NetworkManager = mock(NetworkManager::class.java)
+    private var network: com.viht.data.repository.NetworkManager = mock(com.viht.data.repository.NetworkManager::class.java)
 
     @get:Rule
     val instantTaskExecutionRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
@@ -140,14 +131,15 @@ class MainViewModelTest {
     fun setup() {
         MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(testDispatcher)
-        mainRepositoryImp = WeatherRepositoryImp(apiService, apiDao, testDispatcher)
-        mainViewModel = MainViewModel(useCase)
+        mainRepositoryImp =
+            com.viht.data.repository.WeatherRepositoryImp(apiService, apiDao, testDispatcher)
+        mainViewModel = com.viht.presentation.ui.main.MainViewModel(useCase)
     }
 
     @Test
     fun getLoadingTest() {
         runBlocking {
-            mainRepositoryImp = mock(WeatherRepositoryImp::class.java)
+            mainRepositoryImp = mock(com.viht.data.repository.WeatherRepositoryImp::class.java)
             `when`(mainRepositoryImp.getListForecast("saigon"))
                 .thenReturn(flowOf(ApiResult.Success(data)))
             mainViewModel.getListForecast("saigon")

@@ -1,7 +1,7 @@
 package com.viht.weathermvvm.di
 
-import com.viht.weathermvvm.data.repository.WeatherRepositoryImp
-import com.viht.weathermvvm.domain.repository.WeatherRepository
+import com.viht.data.repository.WeatherRepositoryImp
+import com.viht.domain.repository.WeatherRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

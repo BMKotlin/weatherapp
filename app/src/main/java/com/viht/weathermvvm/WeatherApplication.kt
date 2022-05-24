@@ -4,7 +4,7 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 import androidx.work.Configuration
-import com.viht.weathermvvm.data.workmanager.WeatherWorkFactory
+import com.viht.data.workmanager.WeatherWorkFactory
 
 @HiltAndroidApp
 class WeatherApplication: Application() , Configuration.Provider {

@@ -1,7 +1,7 @@
 package com.viht.weathermvvm.di
 
-import com.viht.weathermvvm.domain.repository.WeatherRepository
-import com.viht.weathermvvm.domain.usecase.WeatherUseCase
+import com.viht.domain.repository.WeatherRepository
+import com.viht.domain.usecase.WeatherUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +14,7 @@ class UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideWeatherUseCase(repository: WeatherRepository) = WeatherUseCase(repository)
+    fun provideWeatherUseCase(repository: WeatherRepository) =
+        WeatherUseCase(repository)
 
 }

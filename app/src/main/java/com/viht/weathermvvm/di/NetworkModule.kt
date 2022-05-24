@@ -3,12 +3,9 @@ package com.viht.weathermvvm.di
 import android.content.Context
 import androidx.work.WorkManager
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.viht.weathermvvm.data.remote.api.WeatherService
-import com.viht.weathermvvm.data.repository.NetworkManager
-import com.viht.weathermvvm.domain.repository.WeatherRepository
-import com.viht.weathermvvm.domain.usecase.WeatherUseCase
-import com.viht.weathermvvm.utils.Constants.BASE_URL
-import dagger.Binds
+import com.viht.data.remote.api.WeatherService
+import com.viht.data.repository.NetworkManager
+import com.viht.presentation.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,5 +83,6 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideNetworkManager(@ApplicationContext context: Context) = NetworkManager(context)
+    fun provideNetworkManager(@ApplicationContext context: Context) =
+        NetworkManager(context)
 }

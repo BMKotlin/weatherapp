@@ -43,7 +43,10 @@ kapt {
 
 dependencies {
 
-    def activity_version = "1.4.0"
+    implementation project(path: ':domain')
+    implementation project(path: ':presentation')
+    implementation project(path: ':data')
+    def activity_version = '1.4.0'
     def coroutinesVersion = '1.6.1'
     def retrofitVersion = "2.9.0"
     def lifeCycleVersion = '2.4.1'

@@ -1,9 +1,7 @@
 package com.viht.weathermvvm
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.viht.weathermvvm.data.repository.ApiResponse
-import com.viht.weathermvvm.data.repository.ApiResult
-import com.viht.weathermvvm.data.repository.NetworkManager
+import com.viht.domain.repository.ApiResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -15,7 +13,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
@@ -31,7 +28,7 @@ class NetworkTest {
 
 
     @Mock
-    private var network: NetworkManager = mock(NetworkManager::class.java)
+    private var network: com.viht.data.repository.NetworkManager = mock(com.viht.data.repository.NetworkManager::class.java)
 
     @get:Rule
     val instantTaskExecutionRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
@@ -45,9 +42,9 @@ class NetworkTest {
     @Test
     fun `when lambda returns successfully then it should emit the result as success`() {
         runBlocking {
-            network = mock(NetworkManager::class.java)
+            network = mock(com.viht.data.repository.NetworkManager::class.java)
             val lambdaResult : Response<Boolean> = Response.success(true)
-            val result = ApiResponse().safeApiCall { Response.success(lambdaResult) }
+            val result = com.viht.data.repository.ApiResponse().safeApiCall { Response.success(lambdaResult) }
             assertEquals(ApiResult.Success(lambdaResult), result)
         }
     }
