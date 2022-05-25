@@ -110,7 +110,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             val periodicWorkRequest: PeriodicWorkRequest =
                 PeriodicWorkRequestBuilder<WeatherWorkManager>(
-                    15, TimeUnit.MINUTES
+                    1, TimeUnit.DAYS
                 )
                     .addTag("DELETE_WEATHER_WORKER")
                     //.setConstraints(constraints)
