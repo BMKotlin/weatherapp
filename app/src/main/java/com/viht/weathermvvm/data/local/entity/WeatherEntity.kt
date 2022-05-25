@@ -9,7 +9,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Entity(
-    tableName = "weather",
+    tableName = "history",
     indices = [
         Index(
             value = ["searchKey", "dateSearch"],
