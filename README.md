@@ -93,7 +93,7 @@ Deatail:
  
       +  usecase
    
-4.   presentation
+4.   presentation: module depends on domain module and data module
 
       +  base
  
