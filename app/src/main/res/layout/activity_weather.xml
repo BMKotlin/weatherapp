@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_normal"
-    tools:context=".presentation.ui.MainActivity">
+    tools:context=".presentation.ui.WeatherActivity">
 
     <EditText
         android:id="@+id/edSearch"

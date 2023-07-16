@@ -11,7 +11,7 @@ import com.viht.weathermvvm.domain.model.TemperatureModel
 import com.viht.weathermvvm.domain.model.WeatherDescriptionModel
 import com.viht.weathermvvm.domain.model.WeatherModel
 import com.viht.weathermvvm.domain.usecase.WeatherUseCase
-import com.viht.weathermvvm.presentation.ui.main.MainViewModel
+import com.viht.weathermvvm.presentation.ui.weather.WeatherViewModel
 import com.viht.weathermvvm.presentation.utils.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -116,7 +116,7 @@ class MainViewModelTest {
     private val testDispatcher = StandardTestDispatcher()//TestCoroutineDispatcher()
     
     @Spy
-    private var mainViewModel: MainViewModel = spy(MainViewModel::class.java)
+    private var weatherViewModel: WeatherViewModel = spy(WeatherViewModel::class.java)
 
     @Mock
     private var mainRepositoryImp: WeatherRepositoryImp = mock(WeatherRepositoryImp::class.java)
@@ -141,7 +141,7 @@ class MainViewModelTest {
         MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(testDispatcher)
         mainRepositoryImp = WeatherRepositoryImp(apiService, apiDao, testDispatcher)
-        mainViewModel = MainViewModel(useCase)
+        weatherViewModel = WeatherViewModel(useCase)
     }
 
     @Test
@@ -150,8 +150,8 @@ class MainViewModelTest {
             mainRepositoryImp = mock(WeatherRepositoryImp::class.java)
             `when`(mainRepositoryImp.getListForecast("saigon"))
                 .thenReturn(flowOf(ApiResult.Success(data)))
-            mainViewModel.getListForecast("saigon")
-            assertEquals(mainViewModel.loading.getOrAwaitValue(), true)
+            weatherViewModel.getListForecast("saigon")
+            assertEquals(weatherViewModel.loading.getOrAwaitValue(), true)
         }
     }
 
